@@ -1,6 +1,6 @@
 # ZabbixSend
 
-A Ruby implementation of Zabbix sender protocol.
+A Ruby implementation of the Zabbix sender protocol.
 
 ## Installation
 
