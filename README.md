@@ -18,6 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
+    require 'zabbix_send'
     sender = ZabbixSend::Sender.new
     sender.send("zabbixserver","zabbixhost","zabbixitem.key","value")
 
