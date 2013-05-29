@@ -1,10 +1,11 @@
 require "zabbix_send/version"
 require 'json'
 require 'socket'
+require 'time'
 
 module ZabbixSend
   class Sender
-    def self.build_message(zhost,zkey,zvalue)
+    def self.build_message(zhost,zkey,zvalue,ztime)
       msg = {
         "request" => "sender data",
         "data" => [
@@ -12,6 +13,7 @@ module ZabbixSend
             "host" => zhost,
             "key" => zkey,
             "value" => zvalue,
+            "clock" => ztime
           }]
       }
       body = JSON.generate msg
@@ -37,9 +39,9 @@ module ZabbixSend
       response = JSON.load response_raw
     end
 
-    def zabbix_send(zserver, zhost,zkey,zvalue)
-      z_send = Sender.build_message zhost, zkey, zvalue
-      Sender.send_message z_send, zserver, 10051
+    def zabbix_send(zserver,zhost,zkey,zvalue,ztime=Time.now.to_i,zport=10051)
+      z_send = Sender.build_message zhost, zkey, zvalue, ztime
+      Sender.send_message z_send, zserver, zport
     end
   end
 end
