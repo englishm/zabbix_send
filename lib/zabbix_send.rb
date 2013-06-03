@@ -18,9 +18,7 @@ module ZabbixSend
       }
       body = JSON.generate msg
       data_length = body.bytesize
-      data_header = "ZBXD\1".encode("ascii") + \
-                    [data_length].pack("i") + \
-                    "\x00\x00\x00\x00"
+      data_header = "ZBXD\1".encode("ascii") + [data_length].pack("Q")
       data_to_send = data_header + body
     end
 
@@ -33,7 +31,7 @@ module ZabbixSend
         raise 'Got invalid response'
       end
       response_data_header = s.recv(8)
-      response_length = response_data_header[0,4].unpack("i")[0]
+      response_length = response_data_header.unpack("Q")[0]
       response_raw = s.recv(response_length)
       s.close
       response = JSON.load response_raw
